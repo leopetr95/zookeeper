@@ -30,18 +30,22 @@ public class ByteBufferOutputStream extends OutputStream {
     public ByteBufferOutputStream(ByteBuffer bb) {
         this.bb = bb;
     }
+
     @Override
     public void write(int b) throws IOException {
         bb.put((byte) b);
     }
+
     @Override
     public void write(byte[] b) throws IOException {
         bb.put(b);
     }
+
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         bb.put(b, off, len);
     }
+
     public static void record2ByteBuffer(Record record, ByteBuffer bb) throws IOException {
         BinaryOutputArchive oa;
         oa = BinaryOutputArchive.getArchive(new ByteBufferOutputStream(bb));

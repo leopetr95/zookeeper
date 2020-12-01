@@ -2,19 +2,24 @@ package org.apache.zookeeper;
 
 import org.apache.jute.Record;
 import org.apache.zookeeper.server.ByteBufferInputStream;
+import org.apache.zookeeper.server.ByteBufferOutputStream;
 import org.apache.zookeeper.txn.CreateTxn;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import java.lang.instrument.Instrumentation;
+
 
 import java.io.IOException;
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 
 import static org.apache.zookeeper.server.ByteBufferInputStream.byteBuffer2Record;
+import static org.apache.zookeeper.server.ByteBufferOutputStream.record2ByteBuffer;
 
 @RunWith(Enclosed.class)
 
@@ -214,7 +219,7 @@ public class ByteBufferInputStreamTest {
         Record record;
         Object result;
 
-        public byteBuffer2RecordTest(ByteBuffer byteBuffer, Object result) {
+        public byteBuffer2RecordTest(ByteBuffer byteBuffer, Record record, Object result) {
             this.byteBuffer = byteBuffer;
             this.record = record;
             this.result = result;
@@ -225,9 +230,10 @@ public class ByteBufferInputStreamTest {
 
             return Arrays.asList(new Object[][]{
 
-                    {null, NullPointerException.class},
-                    {new byte[0], 0},
-                    {new byte[1], 1}
+
+                    {null, null, NullPointerException.class},
+                    {ByteBuffer.allocate(0), new CreateTxn(), BufferOverflowException.class},
+                    {ByteBuffer.allocate(51), new CreateTxn(), "0"},
 
             });
 
@@ -238,13 +244,19 @@ public class ByteBufferInputStreamTest {
 
             try {
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
-                Record record = new CreateTxn();
-                byteBuffer2Record(byteBuffer, record);
+                //serializing
+                ByteBufferOutputStream.record2ByteBuffer(record, byteBuffer);
 
-            } catch (IOException e) {
+                //deserializing
+                ByteBufferInputStream.byteBuffer2Record(byteBuffer, record);
 
-                e.printStackTrace();
+                //checking if byteBuffer is deserialized correctly by serializing it again
+                //serializing
+                ByteBufferOutputStream.record2ByteBuffer(record, byteBuffer);
+
+            } catch (Exception e) {
+
+                Assert.assertEquals(result, e.getClass());
 
             }
 
