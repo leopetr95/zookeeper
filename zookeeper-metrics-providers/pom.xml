@@ -31,8 +31,4 @@
   <name>Apache ZooKeeper - Metrics Providers</name>
   <description>ZooKeeper Metrics Providers</description>
 
-  <modules>
-    <module>zookeeper-prometheus-metrics</module>
-  </modules>
-
 </project>

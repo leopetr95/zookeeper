@@ -26,12 +26,24 @@
     <version>3.7.0-SNAPSHOT</version>
   </parent>
 
+  <properties>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
+  </properties>
+
   <artifactId>zookeeper</artifactId>
   <packaging>jar</packaging>
   <name>Apache ZooKeeper - Server</name>
   <description>ZooKeeper server</description>
 
   <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
+
     <dependency>
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
@@ -55,7 +67,7 @@
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper-jute</artifactId>
-      <version>${project.version}</version>
+      <version>3.6.1</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -118,9 +130,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-       <groupId>io.dropwizard.metrics</groupId>
-       <artifactId>metrics-core</artifactId>
-       <scope>provided</scope>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
@@ -252,7 +264,7 @@
           </includes>
           <forkCount>${surefire-forkcount}</forkCount>
           <reuseForks>false</reuseForks>
-          <argLine>-Xmx512m -Dtest.junit.threads=${surefire-forkcount} -Dzookeeper.junit.threadid=${surefire.forkNumber} -javaagent:${org.jmockit:jmockit:jar}</argLine>
+          <argLine>@{argLine} -Xmx512m -Dtest.junit.threads=${surefire-forkcount} -Dzookeeper.junit.threadid=${surefire.forkNumber} -javaagent:${org.jmockit:jmockit:jar}</argLine>
           <basedir>${project.basedir}</basedir>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <systemPropertyVariables>
@@ -261,7 +273,7 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-	  
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -274,7 +286,25 @@
           </execution>
         </executions>
       </plugin>
-     </plugins>
+
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.5.2</version>
+        <configuration>
+          <targetClasses>
+            <param>org.apache.zookeeper.common.IOUtils</param>
+            <param>org.apache.zookeeper.common.StringUtils</param>
+
+          </targetClasses>
+          <targetTests>
+           <param>org.apache.zookeeper.StringUtilsTest</param>
+            <param>org.apache.zookeeper.TestIOUtilsFinal</param>
+          </targetTests>
+        </configuration>
+      </plugin>
+
+    </plugins>
   </build>
 
 </project>
