@@ -15,7 +15,7 @@ import java.util.List;
 @RunWith(Enclosed.class)
 public class StringUtilsTest {
 
-
+    @RunWith(Parameterized.class)
     public static class SplitTest{
 
         String value;

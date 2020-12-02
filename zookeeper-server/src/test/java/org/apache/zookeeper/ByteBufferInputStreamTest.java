@@ -28,27 +28,22 @@ public class ByteBufferInputStreamTest {
     @RunWith(Parameterized.class)
     public static class readTest{
 
-        byte[] bytes;
-        int offset;
-        int length;
-
+        ByteBuffer byteBuffer;
         Object result;
 
-        public readTest(byte[] bytes, int offset, int length, Object result) {
-            this.bytes = bytes;
-            this.offset = offset;
-            this.length = length;
+        public readTest(ByteBuffer byteBuffer, Object result) {
+            this.byteBuffer = byteBuffer;
             this.result = result;
         }
 
         @Parameterized.Parameters
-        public static Collection readParameters(){
+        public static Collection read1Parameters(){
 
             return Arrays.asList(new Object[][]{
 
-                    {null, 0, 0, NullPointerException.class},
-                    {new byte[0], 1, 1, IndexOutOfBoundsException.class},
-                    {new byte[1], 0, 1, 1}
+                    {null, NullPointerException.class},
+                    {ByteBuffer.allocate(0), -1},
+                    {ByteBuffer.allocate(1), 0}
 
             });
 
@@ -57,12 +52,69 @@ public class ByteBufferInputStreamTest {
         @Test
         public void testRead(){
 
+
             try {
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
+                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
+                int bytesRead = byteBufferInputStream.read();
+
+                Assert.assertEquals(result, bytesRead);
+
+            } catch (Exception e) {
+
+                Assert.assertEquals(result, e.getClass());
+
+            }
+        }
+
+    }
+
+
+    @RunWith(Parameterized.class)
+    public static class read1Test{
+
+        ByteBuffer byteBuffer;
+        byte[] bytes;
+        int offset;
+        int length;
+
+        Object result;
+
+        public read1Test(ByteBuffer byteBuffer, byte[] bytes, int offset, int length, Object result) {
+            this.byteBuffer = byteBuffer;
+            this.bytes = bytes;
+            this.offset = offset;
+            this.length = length;
+            this.result = result;
+        }
+
+        @Parameterized.Parameters
+        public static Collection read1Parameters(){
+
+            return Arrays.asList(new Object[][]{
+
+                    //Bytebuffer, bytes, offset, length, result
+                    {null, null, 0, 0, NullPointerException.class},
+                    {ByteBuffer.allocate(0), new byte[0], 1, 1, -1},
+                    {ByteBuffer.allocate(1), new byte[1], 0, 1, 1},
+
+                    //coverage
+                    {ByteBuffer.allocate(10), new byte[10], 0, 11, 10}
+
+
+            });
+
+        }
+
+        @Test
+        public void testRead1(){
+
+            try {
+
+
+
                 ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
                 int bytesRead = byteBufferInputStream.read(bytes, offset, length);
-
                 Assert.assertEquals(result, bytesRead);
 
             }catch (Exception e) {
@@ -75,18 +127,18 @@ public class ByteBufferInputStreamTest {
     }
 
     @RunWith(Parameterized.class)
-    public static class read1Test {
+    public static class read2Test {
 
         byte[] bytes;
         Object result;
 
-        public read1Test(byte[] bytes, Object result) {
+        public read2Test(byte[] bytes, Object result) {
             this.bytes = bytes;
             this.result = result;
         }
 
         @Parameterized.Parameters
-        public static Collection read1Parameters(){
+        public static Collection read2Parameters(){
 
             return Arrays.asList(new Object[][]{
 
@@ -100,7 +152,7 @@ public class ByteBufferInputStreamTest {
         }
 
         @Test
-        public void testRead1(){
+        public void testRead2(){
 
             try {
 
@@ -116,19 +168,19 @@ public class ByteBufferInputStreamTest {
 
             }
 
-
         }
-
 
     }
 
     @RunWith(Parameterized.class)
     public static class skipTest{
 
+        ByteBuffer byteBuffer;
         long n;
         Object result;
 
-        public skipTest(long n, Object result) {
+        public skipTest(ByteBuffer byteBuffer, long n, Object result) {
+            this.byteBuffer = byteBuffer;
             this.n = n;
             this.result = result;
         }
@@ -138,8 +190,15 @@ public class ByteBufferInputStreamTest {
 
             return Arrays.asList(new Object[][]{
 
-                    {0, 0},
-                    {1, 1}
+                    //ByteBuffer, n, result
+                    {null, 0, NullPointerException.class},
+                    {ByteBuffer.allocate(0), 1, 0},
+                    {ByteBuffer.allocate(1), 1, 1},
+
+                    //coverage
+                    {ByteBuffer.allocate(1), -1, 0}
+
+
 
             });
 
@@ -151,7 +210,6 @@ public class ByteBufferInputStreamTest {
 
             try {
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
                 ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
                 byteBufferInputStream.skip(n);
 
@@ -167,28 +225,6 @@ public class ByteBufferInputStreamTest {
 
     }
 
-    public static class read2Test{
-
-        @Test
-        public void testRead2(){
-
-
-            try {
-
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
-                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
-                int bytesRead = byteBufferInputStream.read();
-
-                Assert.assertEquals(0, bytesRead);
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            }
-        }
-
-    }
 
     public static class availableTest{
 
