@@ -9,17 +9,13 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import java.lang.instrument.Instrumentation;
-
 
 import java.io.IOException;
 import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static org.apache.zookeeper.server.ByteBufferInputStream.byteBuffer2Record;
-import static org.apache.zookeeper.server.ByteBufferOutputStream.record2ByteBuffer;
 
 @RunWith(Enclosed.class)
 
@@ -37,13 +33,13 @@ public class ByteBufferInputStreamTest {
         }
 
         @Parameterized.Parameters
-        public static Collection read1Parameters(){
+        public static Collection readParameters(){
 
             return Arrays.asList(new Object[][]{
 
                     {null, NullPointerException.class},
                     {ByteBuffer.allocate(0), -1},
-                    {ByteBuffer.allocate(1), 0}
+                    {ByteBuffer.allocate(1), 0},
 
             });
 
@@ -51,7 +47,6 @@ public class ByteBufferInputStreamTest {
 
         @Test
         public void testRead(){
-
 
             try {
 
@@ -63,12 +58,29 @@ public class ByteBufferInputStreamTest {
             } catch (Exception e) {
 
                 Assert.assertEquals(result, e.getClass());
-
             }
         }
 
     }
 
+    public static class availableTest{
+
+        @Test
+        public void TestAvailable(){
+
+            try {
+                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
+                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
+                int bytesRead = byteBufferInputStream.available();
+                Assert.assertEquals(1000, bytesRead);
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            }
+        }
+    }
 
     @RunWith(Parameterized.class)
     public static class read1Test{
@@ -101,17 +113,13 @@ public class ByteBufferInputStreamTest {
                     //coverage
                     {ByteBuffer.allocate(10), new byte[10], 0, 11, 10}
 
-
             });
-
         }
 
         @Test
         public void testRead1(){
 
             try {
-
-
 
                 ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
                 int bytesRead = byteBufferInputStream.read(bytes, offset, length);
@@ -192,13 +200,13 @@ public class ByteBufferInputStreamTest {
 
                     //ByteBuffer, n, result
                     {null, 0, NullPointerException.class},
-                    {ByteBuffer.allocate(0), 1, 0},
-                    {ByteBuffer.allocate(1), 1, 1},
+                    {ByteBuffer.allocate(0), 1, (long) 0},
+                    {ByteBuffer.allocate(1), 1, (long) 1},
 
                     //coverage
-                    {ByteBuffer.allocate(1), -1, 0}
-
-
+                    {ByteBuffer.allocate(1), -1, (long) 0},
+                    {ByteBuffer.allocate(1), 0L, 0L},
+                    {ByteBuffer.allocate(5), 10, (long)5}
 
             });
 
@@ -207,44 +215,18 @@ public class ByteBufferInputStreamTest {
         @Test
         public void testSkip(){
 
-
             try {
 
                 ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
-                byteBufferInputStream.skip(n);
+                long skipResult = byteBufferInputStream.skip(n);
 
-                Assert.assertEquals(result, byteBuffer.position());
+                Assert.assertEquals(result, skipResult);
 
             } catch (Exception e) {
 
                 Assert.assertEquals(result, e.getClass());
-
             }
-
         }
-
-    }
-
-
-    public static class availableTest{
-
-        @Test
-        public void TestAvailable(){
-
-            try {
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
-                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
-                int bytesRead = byteBufferInputStream.available();
-                Assert.assertEquals(1000, bytesRead);
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
-
-        }
-
 
     }
 
@@ -266,10 +248,9 @@ public class ByteBufferInputStreamTest {
 
             return Arrays.asList(new Object[][]{
 
-
                     {null, null, NullPointerException.class},
                     {ByteBuffer.allocate(0), new CreateTxn(), BufferOverflowException.class},
-                    {ByteBuffer.allocate(51), new CreateTxn(), "0"},
+                    {ByteBuffer.allocate(100), new CreateTxn(), "0"},
 
             });
 

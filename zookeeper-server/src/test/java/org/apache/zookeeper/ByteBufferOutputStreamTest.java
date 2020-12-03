@@ -194,7 +194,7 @@ public class ByteBufferOutputStreamTest {
 
                     {null, null, NullPointerException.class},
                     {ByteBuffer.allocate(0), new CreateTxn(), BufferOverflowException.class},
-                    {ByteBuffer.allocate(100), new CreateTxn(), "0"}
+                    {ByteBuffer.allocate(100), new CreateTxn(), null}
 
             });
 
@@ -214,6 +214,7 @@ public class ByteBufferOutputStreamTest {
 
             } catch (Exception e) {
 
+                e.printStackTrace();
                 Assert.assertEquals(result, e.getClass());
             }
 
