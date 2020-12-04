@@ -3,14 +3,15 @@ package org.apache.zookeeper;
 import org.apache.zookeeper.common.IOUtils;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,21 +20,91 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.apache.zookeeper.common.IOUtils.cleanup;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
+import static org.apache.zookeeper.common.IOUtils.copyBytes;
+import static org.mockito.Mockito.*;
 
 @RunWith(Enclosed.class)
 public class TestIOUtilsFinal {
+
+    /*@RunWith(PowerMockRunner.class)
+    @PrepareForTest({IOUtils.class})
+    public static class mockPrintCopyBytes2Test {
+
+        @Test
+        public void testCopyBytes2False() {
+
+            try {
+
+                OutputStream outputStream = createOutputStream();
+                PrintStream printStreamMock = mock(PrintStream.class);
+                when(printStreamMock.checkError()).thenReturn(false);
+                PowerMockito.whenNew(PrintStream.class).withArguments(outputStream).thenReturn(printStreamMock);
+
+                copyBytes(createInputStream(), outputStream, 50);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                Assert.assertEquals(NullPointerException.class, e.getClass());
+            }
+
+
+        }
+
+        @Test
+        public void testCopyBytes2True() {
+
+            try {
+
+                PrintStream printStreamMock = mock(PrintStream.class);
+                when(printStreamMock.checkError()).thenReturn(Boolean.TRUE);
+                PowerMockito.whenNew(PrintStream.class).withAnyArguments().thenReturn(printStreamMock);
+
+                System.out.println("fdsf" + printStreamMock.checkError());
+                OutputStream outputStream = createOutputStream();
+                copyBytes(createInputStream(), outputStream, 50);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                Assert.assertEquals(NullPointerException.class, e.getClass());
+            }
+
+
+        }
+    }*/
 
     public static class cleanUpMockTest {
 
         static final Logger log = LoggerFactory.getLogger(TestIOUtilsFinal.class);
 
+        @Test
+        public void tryLogNotNullCleanUpTest() {
+
+            try {
+
+                OutputStream outputStream = Mockito.mock(OutputStream.class);
+                doThrow(new IOException()).when(outputStream).close();
+
+                cleanup(log, outputStream);
+                Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
+
+                /*
+                 * the only way to check if the stream is closed is trying to write into it,
+                 * if the stream is closed a IOException is raised, if the method write doesn't
+                 * raise an exception the stream is not closed
+                 * */
+                outputStream.write(10);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                Assert.assertEquals(IOException.class, e.getClass());
+            }
+        }
 
         @Test
-        public void tryCleanUpTest() {
-
-            OutputStream[] closeables = new OutputStream[]{createOutputStream()};
+        public void tryLogNullCleanUpTest() {
 
             try {
 
@@ -41,19 +112,65 @@ public class TestIOUtilsFinal {
                 doThrow(new IOException()).when(outputStream).close();
 
                 cleanup(null, outputStream);
-                //Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
+                Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
 
-                outputStream.write(10);  //the only way to check if the stream is closed is trying to write into it, if the stream is closed a IOException is raised
+                /*
+                 * the only way to check if the stream is closed is trying to write into it,
+                 * if the stream is closed a IOException is raised, if the method write doesn't
+                 * raise an exception the stream is not closed
+                 * */
+                outputStream.write(10);
 
             } catch (Exception e) {
+
+                e.printStackTrace();
+                Assert.assertEquals(IOException.class, e.getClass());
+            }
+        }
+
+        @Test
+        public void mockOutputCopyBytes1False(){
+
+            try{
+
+                OutputStream outputStream = Mockito.mock(OutputStream.class);
+
+                doThrow(new IOException()).when(outputStream).close();
+
+                copyBytes(createInputStream(), outputStream, 50, false);
+
+                outputStream.write(10);
+
+                Assert.assertTrue(true);
+                System.out.println("Sono qui");
+
+            }catch (Exception e){
+
+                System.out.println("Sono invece qui");
+                e.printStackTrace();
+                Assert.assertEquals(IOException.class, e.getClass());
+            }
+        }
+
+        @Test
+        public void mockOutputCopyBytes1True(){
+
+            try{
+
+                OutputStream outputStream = Mockito.mock(OutputStream.class);
+                doThrow(new IOException()).when(outputStream).close();
+                copyBytes(createInputStream(), outputStream, 50, true);
+                outputStream.write(10);
+
+            }catch (Exception e){
 
                 e.printStackTrace();
                 Assert.assertEquals(IOException.class, e.getClass());
 
             }
         }
-    }
 
+    }
 
     @RunWith(Parameterized.class)
     public static class CloseStreamTest {
@@ -177,9 +294,6 @@ public class TestIOUtilsFinal {
                     //inputstream, outputstream, buffsize, close, result
                     {null, null, 0, false, NullPointerException.class},
                     {createInputStream(), createOutputStream(), 1, true, true},
-
-                    //coverage
-
 
             });
 
