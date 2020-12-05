@@ -172,6 +172,7 @@ public class TestIOUtilsFinal {
     @RunWith(Parameterized.class)
     public static class CloseStreamTest {
 
+
         OutputStream stream;
         Object result;
 
