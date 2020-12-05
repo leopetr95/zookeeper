@@ -71,103 +71,103 @@ public class TestIOUtilsFinal {
         }
     }*/
 
-    public static class cleanUpMockTest {
-
-        static final Logger log = LoggerFactory.getLogger(TestIOUtilsFinal.class);
-
-        @Test
-        public void tryLogNotNullCleanUpTest() {
-
-            try {
-
-                OutputStream outputStream = Mockito.mock(OutputStream.class);
-                doThrow(new IOException()).when(outputStream).close();
-
-                cleanup(log, outputStream);
-                Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
-
-                /*
-                 * the only way to check if the stream is closed is trying to write into it,
-                 * if the stream is closed a IOException is raised, if the method write doesn't
-                 * raise an exception the stream is not closed
-                 * */
-                outputStream.write(10);
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-                Assert.assertEquals(IOException.class, e.getClass());
-            }
-        }
-
-        @Test
-        public void tryLogNullCleanUpTest() {
-
-            try {
-
-                OutputStream outputStream = Mockito.mock(OutputStream.class);
-                doThrow(new IOException()).when(outputStream).close();
-
-                cleanup(null, outputStream);
-                Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
-
-                /*
-                 * the only way to check if the stream is closed is trying to write into it,
-                 * if the stream is closed a IOException is raised, if the method write doesn't
-                 * raise an exception the stream is not closed
-                 * */
-                outputStream.write(10);
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-                Assert.assertEquals(IOException.class, e.getClass());
-            }
-        }
-
-        @Test
-        public void mockOutputCopyBytes1False(){
-
-            try{
-
-                OutputStream outputStream = Mockito.mock(OutputStream.class);
-
-                doThrow(new IOException()).when(outputStream).close();
-
-                copyBytes(createInputStream(), outputStream, 50, false);
-
-                outputStream.write(10);
-
-                Assert.assertTrue(true);
-                System.out.println("Sono qui");
-
-            }catch (Exception e){
-
-                System.out.println("Sono invece qui");
-                e.printStackTrace();
-                Assert.assertEquals(IOException.class, e.getClass());
-            }
-        }
-
-        @Test
-        public void mockOutputCopyBytes1True(){
-
-            try{
-
-                OutputStream outputStream = Mockito.mock(OutputStream.class);
-                doThrow(new IOException()).when(outputStream).close();
-                copyBytes(createInputStream(), outputStream, 50, true);
-                outputStream.write(10);
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-                Assert.assertEquals(IOException.class, e.getClass());
-
-            }
-        }
-
-    }
+//    public static class cleanUpMockTest {
+//
+//        static final Logger log = LoggerFactory.getLogger(TestIOUtilsFinal.class);
+//
+//        @Test
+//        public void tryLogNotNullCleanUpTest() {
+//
+//            try {
+//
+//                OutputStream outputStream = Mockito.mock(OutputStream.class);
+//                doThrow(new IOException()).when(outputStream).close();
+//
+//                cleanup(log, outputStream);
+//                Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
+//
+//                /*
+//                 * the only way to check if the stream is closed is trying to write into it,
+//                 * if the stream is closed a IOException is raised, if the method write doesn't
+//                 * raise an exception the stream is not closed
+//                 * */
+//                outputStream.write(10);
+//
+//            } catch (Exception e) {
+//
+//                e.printStackTrace();
+//                Assert.assertEquals(IOException.class, e.getClass());
+//            }
+//        }
+//
+//        @Test
+//        public void tryLogNullCleanUpTest() {
+//
+//            try {
+//
+//                OutputStream outputStream = Mockito.mock(OutputStream.class);
+//                doThrow(new IOException()).when(outputStream).close();
+//
+//                cleanup(null, outputStream);
+//                Mockito.verify(outputStream, times(1)).close(); // make sure #close method is called once
+//
+//                /*
+//                 * the only way to check if the stream is closed is trying to write into it,
+//                 * if the stream is closed a IOException is raised, if the method write doesn't
+//                 * raise an exception the stream is not closed
+//                 * */
+//                outputStream.write(10);
+//
+//            } catch (Exception e) {
+//
+//                e.printStackTrace();
+//                Assert.assertEquals(IOException.class, e.getClass());
+//            }
+//        }
+//
+//        @Test
+//        public void mockOutputCopyBytes1False(){
+//
+//            try{
+//
+//                OutputStream outputStream = Mockito.mock(OutputStream.class);
+//
+//                doThrow(new IOException()).when(outputStream).close();
+//
+//                copyBytes(createInputStream(), outputStream, 50, false);
+//
+//                outputStream.write(10);
+//
+//                Assert.assertTrue(true);
+//                System.out.println("Sono qui");
+//
+//            }catch (Exception e){
+//
+//                System.out.println("Sono invece qui");
+//                e.printStackTrace();
+//                Assert.assertEquals(IOException.class, e.getClass());
+//            }
+//        }
+//
+//        @Test
+//        public void mockOutputCopyBytes1True(){
+//
+//            try{
+//
+//                OutputStream outputStream = Mockito.mock(OutputStream.class);
+//                doThrow(new IOException()).when(outputStream).close();
+//                copyBytes(createInputStream(), outputStream, 50, true);
+//                outputStream.write(10);
+//
+//            }catch (Exception e){
+//
+//                e.printStackTrace();
+//                Assert.assertEquals(IOException.class, e.getClass());
+//
+//            }
+//        }
+//
+//    }
 
     @RunWith(Parameterized.class)
     public static class CloseStreamTest {

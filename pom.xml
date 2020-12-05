@@ -63,11 +63,19 @@
     <module>zookeeper-metrics-providers</module>
     <module>zookeeper-client</module>
     <module>zookeeper-recipes</module>
-    <module>zookeeper-assembly</module>
+<!--    <module>zookeeper-assembly</module>-->
     <module>zookeeper-compatibility-tests</module>
     <module>moduleTestZookeeper</module>
   </modules>
 
+  <profiles>
+    <profile>
+      <id>expensive-modules-to-build</id>
+      <modules>
+        <module>zookeeper-assembly</module>
+      </modules>
+    </profile>
+  </profiles>
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/zookeeper.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/zookeeper.git</developerConnection>
