@@ -1,35 +1,12 @@
 language: java
-sudo: false
-
-matrix:
-  include:
-    - os: linux
-      jdk: openjdk8
-    - os: linux
-      jdk: openjdk11
-    - os: linux
-      arch: s390x
-      jdk: openjdk11
-      addons:
-        apt:
-          update: true
-          packages:
-            - maven
-            - libcppunit-dev
-
-cache:
-  directories:
-  - "$HOME/.m2"
+jdk:
+  - openjdk11
 
 addons:
-  apt:
-    packages:
-    - libcppunit-dev
+  sonarcloud:
+    organization: "leopetr95"
+    token: 0be3f5724f40ef0a41dc83f2759de867d350fd99
+script:
 
-script: mvn clean apache-rat:check verify -DskipTests spotbugs:check checkstyle:check -Pfull-build
-
-branches:
-  only:
-  - master
-  - branch-3.5
-  - branch-3.4
+  # -Dtest=... --> Indica la classe di test da eseguire
+  - mvn verify -DfailIfNoTests=false sonar:sonar -Pcode-coverage -Dsonar.projectKey=leopetr95_zookeeper -Dmaven.test.failure.ignore=true

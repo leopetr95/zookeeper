@@ -317,20 +317,21 @@
         <artifactId>pitest-maven</artifactId>
         <version>1.5.2</version>
         <configuration>
-          <targetClasses>
 
+          <targetClasses>
             <param>org.apache.zookeeper.common.IOUtils</param>
             <param>org.apache.zookeeper.server.ByteBufferInputStream</param>
             <param>org.apache.zookeeper.server.ByteBufferOutputStream</param>
             <param>org.apache.zookeeper.common.StringUtils</param>
-
           </targetClasses>
+
           <targetTests>
-           <param>org.apache.zookeeper.ByteBufferInputStreamTest</param>
-           <param>org.apache.zookeeper.ByteBufferOutputStreamTest</param>
-           <param>org.apache.zookeeper.StringUtilsTest</param>
             <param>org.apache.zookeeper.TestIOUtilsFinal</param>
+            <param>org.apache.zookeeper.ByteBufferInputStreamTest</param>
+            <param>org.apache.zookeeper.ByteBufferOutputStreamTest</param>
+            <param>org.apache.zookeeper.StringUtilsTest</param>
           </targetTests>
+
         </configuration>
       </plugin>
 

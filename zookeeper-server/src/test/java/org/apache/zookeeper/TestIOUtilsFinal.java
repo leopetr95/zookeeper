@@ -9,9 +9,6 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -207,7 +204,7 @@ public class TestIOUtilsFinal {
 
             } catch (Exception e) {
 
-                //e.printStackTrace();
+                e.printStackTrace();
                 Assert.assertEquals(result, e.getClass());
             }
 
