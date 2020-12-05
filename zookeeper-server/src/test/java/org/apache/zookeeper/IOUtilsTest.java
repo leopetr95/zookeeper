@@ -9,6 +9,9 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +24,9 @@ import static org.apache.zookeeper.common.IOUtils.copyBytes;
 import static org.mockito.Mockito.*;
 
 @RunWith(Enclosed.class)
-public class TestIOUtilsFinal {
+public class IOUtilsTest {
 
-    /*@RunWith(PowerMockRunner.class)
+    @RunWith(PowerMockRunner.class)
     @PrepareForTest({IOUtils.class})
     public static class mockPrintCopyBytes2Test {
 
@@ -35,7 +38,7 @@ public class TestIOUtilsFinal {
                 OutputStream outputStream = createOutputStream();
                 PrintStream printStreamMock = mock(PrintStream.class);
                 when(printStreamMock.checkError()).thenReturn(false);
-                PowerMockito.whenNew(PrintStream.class).withArguments(outputStream).thenReturn(printStreamMock);
+                PowerMockito.whenNew(PrintStream.class).withAnyArguments().thenReturn(printStreamMock);
 
                 copyBytes(createInputStream(), outputStream, 50);
 
@@ -69,11 +72,11 @@ public class TestIOUtilsFinal {
 
 
         }
-    }*/
+    }
 
     public static class cleanUpMockTest {
 
-        static final Logger log = LoggerFactory.getLogger(TestIOUtilsFinal.class);
+        static final Logger log = LoggerFactory.getLogger(IOUtilsTest.class);
 
         @Test
         public void tryLogNotNullCleanUpTest() {
@@ -221,7 +224,7 @@ public class TestIOUtilsFinal {
         OutputStream[] closeables;
         Object result;
 
-        static final Logger log = LoggerFactory.getLogger(TestIOUtilsFinal.class);
+        static final Logger log = LoggerFactory.getLogger(IOUtilsTest.class);
 
         public CleanUpTest(Logger logger, OutputStream[] closeables, Object result) {
             this.logger = logger;

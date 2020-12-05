@@ -326,7 +326,7 @@
           </targetClasses>
 
           <targetTests>
-            <param>org.apache.zookeeper.TestIOUtilsFinal</param>
+            <param>org.apache.zookeeper.IOUtilsTest</param>
             <param>org.apache.zookeeper.ByteBufferInputStreamTest</param>
             <param>org.apache.zookeeper.ByteBufferOutputStreamTest</param>
             <param>org.apache.zookeeper.StringUtilsTest</param>
