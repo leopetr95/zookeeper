@@ -36,15 +36,9 @@ public class StringUtilsTest {
                     {null, null, NullPointerException.class},
                     {"", "", Arrays.asList()},
                     {"s", "st", Arrays.asList("s")},
+
+                    //coverage
                     {"a not so long string", "s", Arrays.asList("a not", "o long", "tring")},
-
-
-                    /*{null, null, NullPointerException.class},
-                    {"string", null, NullPointerException.class},
-                    {null, "s", NullPointerException.class},
-                    {"veryshortstring", "s", Arrays.asList("very", "hort", "tring")},
-                    {"shorts", "s", Arrays.asList("hort")}
-                    */
 
             });
 
@@ -90,14 +84,6 @@ public class StringUtilsTest {
                     {createList(0), "", IndexOutOfBoundsException.class},
                     {createList(1), "s", "string1"},
                     {createList(2), "rt", "string1rtstring2"}
-
-                    /*
-                    {null, "s", null},
-                    {createList(0), "s", IndexOutOfBoundsException.class},
-                    {createList(3), "s", "string1sstring2sstring3"},
-                    {createList(4), "-", "string1-string2-string3-string4"},
-                    {createList(3), "", "string1string2string3"}
-                    */
 
             });
 

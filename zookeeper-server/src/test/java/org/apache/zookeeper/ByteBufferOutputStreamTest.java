@@ -41,10 +41,12 @@ public class ByteBufferOutputStreamTest {
     @RunWith(Parameterized.class)
     public static class writeTest {
 
+        ByteBuffer byteBuffer;
         int b;
         Object result;
 
-        public writeTest(int b, Object result) {
+        public writeTest(ByteBuffer byteBuffer, int b, Object result) {
+            this.byteBuffer = byteBuffer;
             this.b = b;
             this.result = result;
         }
@@ -54,8 +56,9 @@ public class ByteBufferOutputStreamTest {
 
             return Arrays.asList(new Object[][]{
 
-                    {0, (byte) 0},
-                    {1, (byte) 1}
+                    {null, 0, NullPointerException.class},
+                    {ByteBuffer.allocate(0), 0, BufferOverflowException.class},
+                    {ByteBuffer.allocate(1), 1, (byte) 1}
 
             });
 
@@ -66,7 +69,6 @@ public class ByteBufferOutputStreamTest {
 
             try {
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
                 ByteBufferOutputStream byteBufferOutputStream = new ByteBufferOutputStream(byteBuffer);
                 byteBufferOutputStream.write(b);
 
@@ -76,6 +78,7 @@ public class ByteBufferOutputStreamTest {
             } catch (Exception e) {
 
                 e.printStackTrace();
+                Assert.assertEquals(result, e.getClass());
 
             }
         }
@@ -84,10 +87,12 @@ public class ByteBufferOutputStreamTest {
     @RunWith(Parameterized.class)
     public static class write1Test {
 
+        ByteBuffer byteBuffer;
         byte[] b;
         Object result;
 
-        public write1Test(byte[] b, Object result) {
+        public write1Test(ByteBuffer byteBuffer, byte[] b, Object result) {
+            this.byteBuffer = byteBuffer;
             this.b = b;
             this.result = result;
         }
@@ -97,9 +102,9 @@ public class ByteBufferOutputStreamTest {
 
             return Arrays.asList(new Object[][]{
 
-                    {null, NullPointerException.class},
-                    {createByteArray(0), (byte) 0},
-                    {createByteArray(1), (byte) 1}
+                    {null, null, NullPointerException.class},
+                    {ByteBuffer.allocate(0), createByteArray(0), (byte) 0},
+                    {ByteBuffer.allocate(1), createByteArray(1), (byte) 1}
 
             });
 
@@ -110,7 +115,6 @@ public class ByteBufferOutputStreamTest {
 
             try {
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
                 ByteBufferOutputStream byteBufferOutputStream = new ByteBufferOutputStream(byteBuffer);
                 byteBufferOutputStream.write(b);
 
@@ -128,13 +132,14 @@ public class ByteBufferOutputStreamTest {
     @RunWith(Parameterized.class)
     public static class write2Test {
 
-
+        ByteBuffer byteBuffer;
         byte[] b;
         int offset;
         int length;
         Object result;
 
-        public write2Test(byte[] b, int offset, int length, Object result) {
+        public write2Test(ByteBuffer byteBuffer, byte[] b, int offset, int length, Object result) {
+            this.byteBuffer = byteBuffer;
             this.b = b;
             this.offset = offset;
             this.length = length;
@@ -146,9 +151,9 @@ public class ByteBufferOutputStreamTest {
 
             return Arrays.asList(new Object[][]{
 
-                    {null, 0, 0, NullPointerException.class},
-                    {createByteArray(0), 1, 1, IndexOutOfBoundsException.class},
-                    {createByteArray(1), 0, 1, (byte) 1}
+                    {null, null, 0, 0, NullPointerException.class},
+                    {ByteBuffer.allocate(0), createByteArray(0), 1, 1, IndexOutOfBoundsException.class},
+                    {ByteBuffer.allocate(1),createByteArray(1), 0, 1, (byte) 1}
 
             });
 

@@ -54,7 +54,7 @@ public class IOUtilsTest {
 //        }
 
         @Test
-        public void testCopyBytes2True() {
+        public void mockCopyBytes2() {
 
             try {
 
@@ -70,8 +70,6 @@ public class IOUtilsTest {
                 e.printStackTrace();
                 Assert.assertEquals(IOException.class, e.getClass());
             }
-
-
         }
 
 //        @Test
@@ -96,7 +94,7 @@ public class IOUtilsTest {
 //        }
 
         @Test
-        public void mockOutputCopyBytes1True(){
+        public void mockOutputCopyBytes1(){
 
             try{
 
@@ -158,8 +156,6 @@ public class IOUtilsTest {
 
                     {null, NullPointerException.class},
                     {createOutputStream(), IOException.class},
-                    //{new Exception(), IllegalAccessException.class}
-
 
             });
 
@@ -332,6 +328,7 @@ public class IOUtilsTest {
 
                     {null, null, 0, NullPointerException.class},
                     {createInputStream(), createOutputStream(), 1, true},
+
                     {createInputStream(), new PrintStream(createOutputStream(), true),50, true}
 
                     /*for mutation, the only way to kill the changed mutant on the condition while(bytesRead >=0) is by

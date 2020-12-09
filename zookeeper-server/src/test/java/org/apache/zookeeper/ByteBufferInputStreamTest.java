@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.nio.BufferOverflowException;
@@ -16,6 +17,8 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.mockito.Mockito.doThrow;
 
 @RunWith(Enclosed.class)
 
@@ -63,20 +66,44 @@ public class ByteBufferInputStreamTest {
 
     }
 
+    @RunWith(Parameterized.class)
     public static class availableTest{
+
+        ByteBuffer byteBuffer;
+        Object result;
+
+        public availableTest(ByteBuffer byteBuffer, Object result) {
+            this.byteBuffer = byteBuffer;
+            this.result = result;
+        }
+
+        @Parameterized.Parameters
+        public static Collection availableParameters(){
+
+            return Arrays.asList(new Object[][]{
+
+                    {null, NullPointerException.class},
+                    {ByteBuffer.allocate(0), 0},
+                    {ByteBuffer.allocate(1), 1},
+
+            });
+
+        }
+
 
         @Test
         public void TestAvailable(){
 
             try {
-                ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
+
                 ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
                 int bytesRead = byteBufferInputStream.available();
-                Assert.assertEquals(1000, bytesRead);
+                Assert.assertEquals(result, bytesRead);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
 
                 e.printStackTrace();
+                Assert.assertEquals(result, e.getClass());
 
             }
         }
@@ -279,6 +306,53 @@ public class ByteBufferInputStreamTest {
 
 
         }
+
+
+
+    }
+
+    public static class mockRead{
+
+//        @Test
+//        public void mockReadTest(){
+//
+//            try {
+//
+//                ByteBuffer byteBuffer = Mockito.mock(ByteBuffer.class);
+//                doThrow(new IOException()).when(byteBuffer).get();
+//                System.out.println("fsdfsd");
+//                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
+//
+//                byteBufferInputStream.read();
+//
+//            } catch (Exception e) {
+//
+//                e.printStackTrace();
+//                Assert.assertEquals(IOException.class, e.getClass());
+//            }
+//
+//        }
+//
+//        @Test
+//        public void mockRead1Test(){
+//
+//            try {
+//
+//                ByteBuffer byteBuffer = Mockito.mock(ByteBuffer.class);
+//                doThrow(new IOException()).when(byteBuffer).remaining();
+//                System.out.println("fsdfsd");
+//                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
+//
+//                byteBufferInputStream.read(new byte[5], 0, 4);
+//
+//            } catch (Exception e) {
+//
+//                e.printStackTrace();
+//                Assert.assertEquals(IOException.class, e.getClass());
+//            }
+//
+//        }
+//
 
 
 
