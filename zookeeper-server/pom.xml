@@ -26,7 +26,11 @@
     <version>3.7.0-SNAPSHOT</version>
   </parent>
 
+
   <properties>
+    <sonar.projectKey>
+      leopetr95_zookeeper-server-${project.groupId}:${project.artifactId}
+    </sonar.projectKey>
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 

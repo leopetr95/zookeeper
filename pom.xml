@@ -19,6 +19,13 @@
    * limitations under the License.
    */
   -->
+
+  <properties>
+    <sonar.projectKey>
+      leopetr95_zookeeper-${project.groupId}:${project.artifactId}
+    </sonar.projectKey>
+  </properties>
+
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache</groupId>
