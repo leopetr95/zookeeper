@@ -5,7 +5,7 @@ jdk:
 addons:
   sonarcloud:
     organization: "leopetr95"
-    token: 0be3f5724f40ef0a41dc83f2759de867d350fd99
+    token: 07cad854cf2c3f69cfd32941f4b45db39176557d
 script:
 
   # -Dtest=... --> Indica la classe di test da eseguire
