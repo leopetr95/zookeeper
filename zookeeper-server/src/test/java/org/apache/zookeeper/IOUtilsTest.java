@@ -1,15 +1,11 @@
 package org.apache.zookeeper;
 
-import org.apache.commons.io.input.NullInputStream;
 import org.apache.zookeeper.common.IOUtils;
-import org.apache.zookeeper.server.ByteBufferInputStream;
-import org.hamcrest.Matchers;
 import org.junit.*;
 
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -23,7 +19,6 @@ import java.util.Collection;
 
 import static org.apache.zookeeper.common.IOUtils.*;
 import static org.mockito.Mockito.*;
-import static org.powermock.configuration.ConfigurationType.PowerMock;
 
 @RunWith(Enclosed.class)
 public class IOUtilsTest {
@@ -182,59 +177,6 @@ public class IOUtilsTest {
     }
 
     @RunWith(Parameterized.class)
-    public static class CleanUpTest {
-
-        Logger logger;
-        OutputStream[] closeables;
-        Object result;
-
-        static final Logger log = LoggerFactory.getLogger(IOUtilsTest.class);
-
-        public CleanUpTest(Logger logger, OutputStream[] closeables, Object result) {
-            this.logger = logger;
-            this.closeables = closeables;
-            this.result = result;
-        }
-
-        @Parameterized.Parameters
-        public static Collection cleanUpParameters() {
-
-            return Arrays.asList(new Object[][]{
-
-                    {null, null, NullPointerException.class},
-                    {log, new OutputStream[]{}, NullPointerException.class},
-                    {log, new OutputStream[]{createOutputStream()}, IOException.class},
-
-                    //{new Exception(), new Exception(), IllegalArgumentException.class}
-
-            });
-
-        }
-
-        @Test
-        public void cleanUpTest() {
-
-            try {
-
-                cleanup(logger, closeables);
-                for (OutputStream closeable : closeables) {
-
-                    closeable.write(10);  //the only way to check if the stream is closed is trying to write into it, if the stream is closed a IOException is raised
-
-                }
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-                Assert.assertEquals(result, e.getClass());
-
-            }
-
-        }
-
-    }
-
-    @RunWith(Parameterized.class)
     public static class CopyBytes1Test {
 
         InputStream inputStream;
@@ -302,6 +244,59 @@ public class IOUtilsTest {
 
             cleanup(null, inputStream, outputStream);
             System.out.println("Streams closed");
+
+        }
+
+    }
+
+    @RunWith(Parameterized.class)
+    public static class CleanUpTest {
+
+        Logger logger;
+        OutputStream[] closeables;
+        Object result;
+
+        static final Logger log = LoggerFactory.getLogger(IOUtilsTest.class);
+
+        public CleanUpTest(Logger logger, OutputStream[] closeables, Object result) {
+            this.logger = logger;
+            this.closeables = closeables;
+            this.result = result;
+        }
+
+        @Parameterized.Parameters
+        public static Collection cleanUpParameters() {
+
+            return Arrays.asList(new Object[][]{
+
+                    {null, null, NullPointerException.class},
+                    {log, new OutputStream[]{}, NullPointerException.class},
+                    {log, new OutputStream[]{createOutputStream()}, IOException.class},
+
+                    //{new Exception(), new Exception(), IllegalArgumentException.class}
+
+            });
+
+        }
+
+        @Test
+        public void cleanUpTest() {
+
+            try {
+
+                cleanup(logger, closeables);
+                for (OutputStream closeable : closeables) {
+
+                    closeable.write(10);  //the only way to check if the stream is closed is trying to write into it, if the stream is closed a IOException is raised
+
+                }
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                Assert.assertEquals(result, e.getClass());
+
+            }
 
         }
 
