@@ -319,14 +319,14 @@
         <configuration>
 
           <targetClasses>
-            <param>org.apache.zookeeper.common.IOUtils</param>
+<!--            <param>org.apache.zookeeper.common.IOUtils</param>-->
             <param>org.apache.zookeeper.server.ByteBufferInputStream</param>
             <param>org.apache.zookeeper.server.ByteBufferOutputStream</param>
             <param>org.apache.zookeeper.common.StringUtils</param>
           </targetClasses>
 
           <targetTests>
-            <param>org.apache.zookeeper.IOUtilsTest</param>
+<!--            <param>org.apache.zookeeper.IOUtilsTest</param>-->
             <param>org.apache.zookeeper.ByteBufferInputStreamTest</param>
             <param>org.apache.zookeeper.ByteBufferOutputStreamTest</param>
             <param>org.apache.zookeeper.StringUtilsTest</param>
