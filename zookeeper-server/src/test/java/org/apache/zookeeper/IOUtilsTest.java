@@ -343,14 +343,14 @@ public class IOUtilsTest {
 
             try {
 
-                File file = new File("/home/leonardo/Desktop/Università/ISW2DeAngelis/archive/SpringMVC17/zookeeper/zookeeper-server/src/main/resources/inPutFile.txt");
+                File file = new File("/zookeeper/zookeeper-server/src/main/resources/inPutFile.txt");
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                 String strInput = bufferedReader.readLine();
                 System.out.println(strInput);
 
                 copyBytes(inputStream, outputStream, buffSize);
 
-                File file1 = new File("/home/leonardo/Desktop/Università/ISW2DeAngelis/archive/SpringMVC17/zookeeper/zookeeper-server/src/main/resources/outPutFile.txt");
+                File file1 = new File("/zookeeper/zookeeper-server/src/main/resources/outPutFile.txt");
                 BufferedReader bufferedReader1 = new BufferedReader(new FileReader(file1));
                 String strOutput = bufferedReader1.readLine();
                 System.out.println(strOutput);
