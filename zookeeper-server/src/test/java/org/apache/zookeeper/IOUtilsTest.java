@@ -327,7 +327,7 @@ public class IOUtilsTest {
                     {null, null, 0, NullPointerException.class},
                     {createInputStream(), createOutputStream(), 1, true},
 
-                    //{createInputStream(), new PrintStream(createOutputStream(), true),50, true}
+                    {createInputStream(), new PrintStream(createOutputStream(), true),50, true}
 
                     /*for mutation, the only way to kill the changed mutant on the condition while(bytesRead >=0) is by
                     * having the method read returning 0, this is only possible when the buffer passed as parameter has a length of zero.
