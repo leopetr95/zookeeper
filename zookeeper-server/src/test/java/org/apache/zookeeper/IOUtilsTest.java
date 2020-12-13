@@ -29,27 +29,6 @@ public class IOUtilsTest {
     @PrepareForTest({IOUtils.class})
     public static class mockPrintCopyBytes2Test {
 
-//        @Test
-//        public void testCopyBytes2False() {
-//
-//            try {
-//
-//                OutputStream outputStream = createOutputStream();
-//                PrintStream printStreamMock = mock(PrintStream.class);
-//                when(printStreamMock.checkError()).thenReturn(false);
-//                PowerMockito.whenNew(PrintStream.class).withAnyArguments().thenReturn(printStreamMock);
-//
-//                copyBytes(createInputStream(), new PrintStream(outputStream, true),50);
-//
-//            } catch (Exception e) {
-//
-//                e.printStackTrace();
-//                Assert.assertEquals(IOException.class, e.getClass());
-//            }
-//
-//
-//        }
-
         @Test
         public void mockCopyBytes2() {
 
@@ -68,27 +47,6 @@ public class IOUtilsTest {
                 Assert.assertEquals(IOException.class, e.getClass());
             }
         }
-
-//        @Test
-//        public void mockOutputCopyBytes1False(){
-//
-//            try{
-//
-//                OutputStream outputStream = Mockito.mock(OutputStream.class);
-//                InputStream inputStream = createInputStream();
-//
-//                doThrow(new IOException()).when(outputStream).close();
-//
-//                copyBytes(inputStream, outputStream, 50, false);
-//
-//                outputStream.write(10);
-//
-//            }catch (Exception e){
-//
-//                e.printStackTrace();
-//                Assert.assertEquals(IOException.class, e.getClass());
-//            }
-//        }
 
         @Test
         public void mockOutputCopyBytes1(){
@@ -132,8 +90,6 @@ public class IOUtilsTest {
                 Assert.assertEquals(IOException.class, e.getClass());
             }
         }
-        //system
-
     }
 
     @RunWith(Parameterized.class)

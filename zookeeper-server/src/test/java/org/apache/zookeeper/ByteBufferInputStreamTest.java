@@ -9,22 +9,16 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.mockito.Mockito.doThrow;
 
 @RunWith(Enclosed.class)
 
 public class ByteBufferInputStreamTest {
-
-    //un commit
 
     @RunWith(Parameterized.class)
     public static class readTest{
@@ -313,51 +307,5 @@ public class ByteBufferInputStreamTest {
 
     }
 
-//    public static class mockRead{
-//
-////        @Test
-////        public void mockReadTest(){
-////
-////            try {
-////
-////                ByteBuffer byteBuffer = Mockito.mock(ByteBuffer.class);
-////                doThrow(new IOException()).when(byteBuffer).get();
-////                System.out.println("fsdfsd");
-////                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
-////
-////                byteBufferInputStream.read();
-////
-////            } catch (Exception e) {
-////
-////                e.printStackTrace();
-////                Assert.assertEquals(IOException.class, e.getClass());
-////            }
-////
-////        }
-////
-////        @Test
-////        public void mockRead1Test(){
-////
-////            try {
-////
-////                ByteBuffer byteBuffer = Mockito.mock(ByteBuffer.class);
-////                doThrow(new IOException()).when(byteBuffer).remaining();
-////                System.out.println("fsdfsd");
-////                ByteBufferInputStream byteBufferInputStream = new ByteBufferInputStream(byteBuffer);
-////
-////                byteBufferInputStream.read(new byte[5], 0, 4);
-////
-////            } catch (Exception e) {
-////
-////                e.printStackTrace();
-////                Assert.assertEquals(IOException.class, e.getClass());
-////            }
-////
-////        }
-////
-//
-//
-//
-//    }
 
 }
